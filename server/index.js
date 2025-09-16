@@ -7,13 +7,14 @@ dotenv.config();
 
 import connectDB from './config/dbConnection.js' ;
 import UserRouter from "./routes/user.route.js";
+import ReportRouter from "./routes/report.route.js";
 
 app.use(cors());
 app.use(express.json());
 
 //router 
-
-app.use("api/auth" , UserRouter);
+app.use('/api/auth' , UserRouter); // user login-Signup
+app.use('/api/report' , ReportRouter ); // report create / show 
 
 
 // connect to Database 

@@ -17,11 +17,33 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["user", "admin"],
-      default: "user",
+      enum: ["citizen", "admin"], // Role-based access control
+      default: "citizen",
+    },
+    points: {
+      type: Number,
+      default: 0,
+    },
+    badges: [
+      {
+        type: String, // e.g., ["Eco-Warrior", "First Cleanup", "Neighborhood Hero"]
+      },
+    ],
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"], // point graphics
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number], // [longitude, latitude]
+        default: [0, 0],
+      },
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 // Hash password before saving

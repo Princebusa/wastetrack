@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'r
 
 
 import Dashboard from './dashboard';
+import HomePage from './Landing/index'
 function App() {
 
 
@@ -10,6 +11,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/app/*" element={<Dashboard />} />
+        <Route path="/" element={<HomePage/>} />
       </Routes>
     </Router>
   )

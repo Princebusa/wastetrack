@@ -1,0 +1,23 @@
+import { Routes, Route, Navigate  } from 'react-router-dom';
+
+
+import MyMark from './dashboard/MyMarks';
+import Leaderboard from './dashboard/Leaderboard';
+import Inbox from './dashboard/Inbox';
+function dashboard() {
+
+
+  return (
+    
+   <Routes>
+     <Route index element={<Navigate to="mymarks" replace />} />
+    <Route path="/mymarks" element={<MyMark/>} />
+    <Route path="/leaderboard" element={<Leaderboard/>} />
+    <Route path="/inbox" element={<Inbox/>} />
+    </Routes>
+
+      
+  )
+}
+
+export default dashboard

@@ -1,25 +1,24 @@
-const express = require('express');
-const cors = require('cors');
+import express from "express";
 const app = express();
-const PORT = process.env.PORT || 5000;
 
+import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
+
+import connectDB from './config/dbConnection.js' ;
+import UserRouter from "./routes/user.route.js";
 
 app.use(cors());
 app.use(express.json());
 
+//router 
 
-app.get('/', (req, res) => {
-    res.send('API is running...');
-});
+app.use("api/auth" , UserRouter);
 
-app.get('/home' , (req , res) =>{
-    res.send("this is home page ")
-}) ;
 
-app.get('/prince' , (req , res) =>{
-    res.send("this is home page ")
-}) ;
+// connect to Database 
+connectDB();
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+app.listen(process.env.PORT , () => {
+    console.log(`server is listening on ${process.env.PORT}`)
 });

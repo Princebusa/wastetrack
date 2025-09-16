@@ -28,7 +28,7 @@ console.log(MentoringIcon)
     ]
     return (
         <div className=' h-screen relative w-[225px]'>
-            <div className="absolute top-0 left-0 bg-gray-100 w-full h-screen flex flex-col justify-between border-r border-r-gray-300">
+            <div className="fixed max- w-[225px] top-0 left-0 bg-gray-100  h-screen flex flex-col justify-between border-r border-r-gray-300">
                 <div className=' gap-2 border-b border-b-gray-300 bg-[#3446c1] min-h-[40px] flex items-center '>
                     {/* <img className='w-[45px]'  alt="logo" /> */}
                     <p className="font-semibold text-[17px] pl-5 text-white">PlastTrack </p>

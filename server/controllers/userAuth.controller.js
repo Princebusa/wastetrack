@@ -7,13 +7,13 @@ export const register = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-  const { email, password } = req.body;
+  const { email, password , username} = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: "User already exists" });
 
-    const user = new User({ email, password });
+    const user = new User({ email, password , username});
     await user.save();
 
     res.status(201).json({ message: "User registered successfully", user: { email, role: user.role } });
@@ -36,7 +36,7 @@ export const login = async (req, res) => {
     const isMatch = await user.matchPassword(password);
     if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET , { expiresIn: process.env.JWT_EXPIRE });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET , { expiresIn: process.env.JWT_EXPIRE });
 
     res.json({ message : "Succesfully login user" , token });
     
@@ -45,10 +45,4 @@ export const login = async (req, res) => {
   }
 };
 
-export const userDashboard = (req, res) => {
-  res.json({ message: `Welcome User: ${req.user.id}` });
-};
 
-export const adminDashboard = (req, res) => {
-  res.json({ message: `Welcome Admin: ${req.user.id}` });
-};

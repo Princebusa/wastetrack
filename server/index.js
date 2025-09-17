@@ -11,6 +11,7 @@ import ReportRouter from "./routes/report.route.js";
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({extended : true}));
 
 //router 
 app.use('/api/auth' , UserRouter); // user login-Signup

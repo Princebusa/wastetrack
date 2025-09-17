@@ -10,7 +10,7 @@ const reportSchema = mongoose.Schema({
     type: {
       type: String,
       enum: ["Point"],
-      required: true,
+      default : "Point"
     },
     coordinates: {
       type: [Number], // [longitude, latitude]
@@ -26,9 +26,12 @@ const reportSchema = mongoose.Schema({
     enum: ["Bottles", "Bags", "Packaging", "Other"],
     required: true,
   },
+  description : {
+    type : String 
+  },
   status: {
     type: String,
-    enum: ["reported", "in-progress", "resolved", "spam"],
+    enum: ["reported", "in-progress", "resolved"],
     default: "reported",
   },
   cleanupProofUrl: {
@@ -38,3 +41,4 @@ const reportSchema = mongoose.Schema({
 });
 
 const Report = mongoose.model('Report' , reportSchema);
+export default Report

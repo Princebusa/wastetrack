@@ -17,5 +17,5 @@ export const loginValidation = [
 
 export const reportValidation = [
   body("location").notEmpty().withMessage("Location required"),
-  
+  body("wasteType").notEmpty().withMessage("waste type required"),
 ]

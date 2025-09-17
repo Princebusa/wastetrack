@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 async function connectDB() {
     mongoose
-  .connect("mongodb://localhost:27017/authApp", {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

@@ -3,6 +3,10 @@ import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
   {
+    username : {
+      type: String,
+      required : true
+    },
     email: {
       type: String,
       required: [true, "Email is required"],
@@ -15,18 +19,14 @@ const userSchema = new mongoose.Schema(
       required: [true, "Password is required"],
       minlength: 6,
     },
-    role: {
-      type: String,
-      enum: ["citizen", "admin"], // Role-based access control
-      default: "citizen",
-    },
     points: {
       type: Number,
       default: 0,
     },
-    badges: [
+    reports : [
       {
-        type: String, // e.g., ["Eco-Warrior", "First Cleanup", "Neighborhood Hero"]
+        type: mongoose.Schema.Types.ObjectId,
+        ref : "Report"
       },
     ],
     location: {

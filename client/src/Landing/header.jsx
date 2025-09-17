@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Button from "./custom-ui/button"
+import { Link } from "react-router-dom"
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -32,10 +33,15 @@ export default function Header() {
               Rewards
             </a>
             <Button variant="outline" className="hover:scale-105 transition-transform duration-200 bg-transparent">
-              Sign In
+               <Link to="/signin"  >
+                  Sign In
+                </Link>
+               
             </Button>
             <Button className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
-              Get Started
+               <Link to="/signup" >
+                  Get Started
+                </Link>
             </Button>
           </nav>
 

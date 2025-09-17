@@ -1,11 +1,11 @@
 import { NavLink } from "react-router-dom"
 import {UserSquareIcon, MentoringIcon, CheckmarkSquare04Icon, CancelSquareIcon, InboxDownloadIcon, MapsIcon, DiscoverSquareIcon} from 'hugeicons-react'
-
+import { useAuth } from "../context/AuthContext"
 
 
 
 const sidebar = () => {
-
+const{logout} = useAuth()
     const sidebar = [
         {
             icon: MapsIcon,
@@ -49,7 +49,7 @@ const sidebar = () => {
             <div className="fixed w-[205px] top-0 left-0 bg-gray-100  h-screen flex flex-col justify-between border-r border-r-gray-300">
                 <div className=' gap-2 border-b border-b-gray-300  min-h-[40px] flex items-center '>
                     {/* <img className='w-[45px]'  alt="logo" /> */}
-                    <div className="font-semibold text-[17px] pl-5 flex "><p className="bg-green-800 text-white flex justify-center block w-[25px] h-[25px] rounded-[4px] mr-2">P</p><p>PlastTrack</p> </div>
+                    <div className="font-semibold text-[17px] pl-4 flex"><p className="bg-green-800 text-white flex justify-center block w-[25px] h-[25px] rounded-[4px] mr-2">P</p><p>PlastTrack</p> </div>
 
                 </div>
                 <div className="px-2 py-5 h-full flex flex-col justify-between gap-1">
@@ -95,7 +95,7 @@ const sidebar = () => {
                     })}
                     </div>
                     </div>
-                    <button  className="flex rounded-[7px] py-[5px] px-2 mt-full font-medium text-[13px] gap-[8px] hover:bg-gray-200 cursor-pointer"><CancelSquareIcon size={19}/>Log out</button>
+                    <button onClick={logout}  className="flex rounded-[7px] py-[5px] px-2 mt-full font-medium text-[13px] gap-[8px] hover:bg-gray-200 cursor-pointer"><CancelSquareIcon size={19}/>Log out</button>
                 </div>
             </div>
         </div>

@@ -8,7 +8,7 @@ export const addReport = async (req, res) => {
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() });
 
-  const { latitude, longitude, wasteType, description } = req.body;
+  const { latitude, longitude, description } = req.body;
 
   const file = req.file;
   const userId = req.user.id;
@@ -25,8 +25,8 @@ export const addReport = async (req, res) => {
             coordinates: [longitude, latitude],
           },
           imageUrl: imageUrl.url,
-          wasteType,
-          description,
+          wasteType: "Bags",
+          description: description
         });
       
         await report.save();

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useGSAP } from '@gsap/react';
 import gsap from "gsap";
+import axios from 'axios'
 import Layout from "../layout/Layout";
 import {
   MapContainer,
@@ -13,6 +14,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { Camera, MapPin } from "lucide-react";
 import {Location03Icon, Cancel01Icon} from 'hugeicons-react'
+
 
 
 // Custom Icon for current user
@@ -124,13 +126,24 @@ export default function map() {
     setTaskadd(true);
   };
 
-  
-  const handleSubmit = (e) => {
+ 
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!position || !photo || !info) {
       alert("Please select location, add photo & details!");
       return;
     }
+    const formDataToSend = new FormData();
+    formDataToSend.append('longitude', position?.lng);
+    formDataToSend.append('latitude', position?.lat);
+    formDataToSend.append('image', photo);
+
+    
+      const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/report`, formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
     const newReport = {
       id: Date.now(),
       lat: position.lat,
@@ -159,11 +172,11 @@ export default function map() {
 
      
       <div className="relative flex flex-col">
-        <div className="mb-2    flex justify-between items-center  ">
+        <div className="mb-2  text-[16px]  flex justify-between items-center  ">
             <h3>Select Your Location</h3>
               <button
           onClick={handleCurrentLocation}
-          className=" bg-[#556B2F] text-white text-[13px] rounded-md shadow-lg px-4 py-2  flex items-center gap-2 hover:bg-green-700 transition"
+          className=" bg-[#556B2F] text-white text-[14px] rounded-md shadow-lg px-4 py-2  flex items-center gap-2 hover:bg-green-700 transition"
         >
           <Location03Icon size={18}/>
           Use My Location

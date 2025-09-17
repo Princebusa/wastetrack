@@ -17,7 +17,7 @@ app.use(express.urlencoded({extended : true}));
 //router 
 app.use('/api/auth' , UserRouter); // user login-Signup
 app.use('/api/report' , ReportRouter ); // user report create / show 
-app.use('/api/dashboard' , DashboardRouter ); // show all Users and Reports
+app.use('/api/get' , DashboardRouter ); // show all Users and Reports
 
 
 // connect to Database 

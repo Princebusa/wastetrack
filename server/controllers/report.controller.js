@@ -24,7 +24,6 @@ export const addReport = async (req, res) => {
             coordinates: [longitude, latitude],
           },
           imageUrl: imageUrl.url,
-          wasteType,
           description,
         });
       

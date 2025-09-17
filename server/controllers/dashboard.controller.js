@@ -35,12 +35,9 @@ export const getUser = async (req, res) => {
 };
 
 export const getReport = async (req, res) => {
-    const reportId = req.params.reportid;
+    const userId = req.user.id;
     try {
-      const report = await Report.findById(reportId).populate({
-        path: "userId",
-        select: "username -_id",
-      });
+      const report = await Report.find({userId : userId});
       res.send({success : true , data : report});
 
     } catch (error) {

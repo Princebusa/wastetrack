@@ -5,12 +5,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">C</span>
-              </div>
-              <span className="text-xl font-bold">CleanCity</span>
-            </div>
+           <div className="font-semibold text-[17px] flex mb-5 "><p className="bg-green-800 text-white flex justify-center block w-[25px] h-[25px] rounded-[4px] mr-2">P</p><p>PlastTrack</p> </div>
             <p className="text-gray-400 mb-4 max-w-md">
               Empowering communities to create cleaner, healthier environments through citizen engagement and gamified
               reporting.

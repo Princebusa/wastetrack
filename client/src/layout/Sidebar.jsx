@@ -47,9 +47,9 @@ const sidebar = () => {
     return (
         <div className=' h-screen relative w-[205px]'>
             <div className="fixed w-[205px] top-0 left-0 bg-gray-100  h-screen flex flex-col justify-between border-r border-r-gray-300">
-                <div className=' gap-2 border-b border-b-gray-300 bg-[#3446c1] min-h-[40px] flex items-center '>
+                <div className=' gap-2 border-b border-b-gray-300  min-h-[40px] flex items-center '>
                     {/* <img className='w-[45px]'  alt="logo" /> */}
-                    <p className="font-semibold text-[17px] pl-5 text-white">PlastTrack </p>
+                    <div className="font-semibold text-[17px] pl-5 flex "><p className="bg-green-800 text-white flex justify-center block w-[25px] h-[25px] rounded-[4px] mr-2">P</p><p>PlastTrack</p> </div>
 
                 </div>
                 <div className="px-2 py-5 h-full flex flex-col justify-between gap-1">
@@ -63,7 +63,7 @@ const sidebar = () => {
                                 key={idx}
                                 to={itm.url}
                                 className={({ isActive }) =>
-                                    `flex items-center rounded-[7px] py-[5px] px-2 font-medium text-[13px] gap-[8px] ${isActive ? 'bg-bg-gray-200' : 'hover:bg-gray-200'
+                                    `flex items-center rounded-[7px] py-[5px] px-2 font-medium text-[13px] gap-[8px] ${isActive ? 'bg-gray-200' : 'hover:bg-gray-200'
                                     }`
                                 }
                             >
@@ -84,7 +84,7 @@ const sidebar = () => {
                                 key={idx}
                                 to={itm.url}
                                 className={({ isActive }) =>
-                                    `flex items-center rounded-[7px] py-[5px] px-2 font-medium text-[13px] gap-[8px] ${isActive ? 'bg-bg-gray-200' : 'hover:bg-gray-200'
+                                    `flex items-center rounded-[7px] py-[5px] px-2 font-medium text-[13px] gap-[8px] ${isActive ? 'bg-gray-200' : 'hover:bg-gray-200'
                                     }`
                                 }
                             >

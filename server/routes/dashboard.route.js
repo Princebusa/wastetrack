@@ -1,12 +1,13 @@
 import { Router } from "express";
-import { getAllReview, getAllUser , getUser , getReport } from "../controllers/dashboard.controller.js"
+import { getAllReview, getAllUser , getUser , getReport } from "../controllers/dashboard.controller.js";
+import {authenticate} from '../middleware/authMiddleware.js';
 
 const router = Router();
 
-router.get("/allusers", getAllUser); 
-router.get("/allreports", getAllReview);
-router.get("/user/:userid", getUser);
-router.get("/report/:reportid", getReport);
+router.get("/allusers", authenticate , getAllUser); // all user for report show on map  
+router.get("/allreports" , authenticate , getAllReview); //all reports 
+router.get("/user/:userid", authenticate , getUser); // specific user details
+router.get("/report/:reportid" , authenticate , getReport); // specific report details
 
 
 export default router;

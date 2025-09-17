@@ -13,9 +13,8 @@ export const addReport = async (req, res) => {
   const file = req.file;
   const userId = req.user.id;
 
-    try {
-
-        const user = await User.findById(userId);
+  try {
+    const user = await User.findById(userId);
 
         const imageUrl = await fileUpload(file.buffer, `${user.username}_wasteImage`);
       
@@ -25,23 +24,33 @@ export const addReport = async (req, res) => {
             coordinates: [longitude, latitude],
           },
           imageUrl: imageUrl.url,
-          wasteType: "Bags",
-          description: description
+          wasteType,
+          description,
         });
       
         await report.save();
 
-        const updatedUser = await User.findOneAndUpdate({_id : userId} , 
-          { $push: { reports : report._id } },
-          {new : true}
-        );
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: userId },
+      { $push: { reports: report._id } },
+      { new: true }
+    );
 
-        updatedUser.save();
-      
-        res.send(report);
-        
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
-    }
+    updatedUser.save();
 
+    res.send({success : true , message : "reporte succesfully"});
+  } catch (error) {
+    res.status(500).json({ success : false , message: "Server error", error: error.message });
+  }
+};
+
+export const getUserReports = async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const user = await User.findById(userId).populate("reports");
+    res.send({success : true , data : user});
+  } catch (error) {
+    res.status(500).json({success : false , message: "Server error", error: error.message });
+  }
 };

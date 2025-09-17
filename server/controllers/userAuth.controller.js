@@ -15,10 +15,10 @@ export const register = async (req, res) => {
 
     const user = new User({ email, password , username});
     await user.save();
-const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET , { expiresIn: process.env.JWT_EXPIRE });
-    res.status(201).json({ message: "User registered successfully", user: { email, role: user.role }, token });
+
+    res.status(201).json({ message: "User registered successfully", user: { email, role: user.role } });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ success : false , message: "Server error", error: error.message });
   }
 };
 
@@ -38,10 +38,10 @@ export const login = async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET , { expiresIn: process.env.JWT_EXPIRE });
 
-    res.json({ message : "Succesfully login user" , token });
+    res.json({ success : true , message : "Succesfully login user" , token });
     
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({success : false , message: "Server error", error: error.message });
   }
 };
 

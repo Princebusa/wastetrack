@@ -17,9 +17,14 @@ app.use(express.urlencoded({extended : true}));
 
 //router 
 app.use('/api/auth' , UserRouter); // user login-Signup
+<<<<<<< HEAD
 app.use('/api/report' , ReportRouter ); // user report create / 
 app.use('/api/dashboard' , DashboardRouter ); // show all Users and Reports
 app.use('/api/posts' , PostRouter ); // CRUD in Post 
+=======
+app.use('/api/report' , ReportRouter ); // user report create / show 
+app.use('/api/get' , DashboardRouter ); // show all Users and Reports
+>>>>>>> 8634b690e2335e246fa175ce78ed7f6aeb0d6eaf
 
 
 // connect to Database 

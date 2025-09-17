@@ -4,6 +4,7 @@ import gsap from "gsap";
 import axios from 'axios'
 import Layout from "../layout/Layout";
 import MinimalInput from "../components/input";
+import toast from "react-hot-toast";
 import {
   MapContainer,
   TileLayer,
@@ -91,28 +92,24 @@ export default function map() {
 
     const fetchReports = async () => {
       try {
+const res = await axios.get("http://localhost:3000/api/get/allreports"); // your API endpoint
+       
+        const apiData = res.data.data;
 
-        const res = await fetch("/api/reports");
-        const data = await res.json();
-        setReports(data);
+    const transformed = apiData.map((report, index) => ({
+      id: report._id || index + 1,
+      lat: report.location.coordinates[1], // latitude
+      lng: report.location.coordinates[0], // longitude
+      info: report.description,
+      image: report.imageUrl,
+      status: report.status,
+      wasteType: report.wasteType,
+    }));
+        setReports(transformed);
       } catch (err) {
         console.error("Failed to load reports, using dummy data:", err);
 
-        setReports([
-          {
-            id: 1,
-            lat: 19.076,
-            lng: 72.8777,
-            info: "Large plastic dump near market.",
-            icon: MapPin
-          },
-          {
-            id: 2,
-            lat: 28.7041,
-            lng: 77.1025,
-            info: "Overflowing garbage bins.",
-          },
-        ]);
+        
       }
     };
     fetchReports();
@@ -143,30 +140,27 @@ export default function map() {
     formDataToSend.append('description', info);
 
     const idToken = localStorage.getItem('token');
-    await axios.post(`${import.meta.env.VITE_BACKEND_URL}/report`, formDataToSend, {
+    const {data}=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/report`, formDataToSend, {
       headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': `Bearer ${idToken}`
       },
     });
+if(data.success === true){
+   toast.success("✅ Report submitted successfully!");
+}
     const newReport = {
       id: Date.now(),
       lat: position.lat,
       lng: position.lng,
       info,
     };
-
-    console.log("Report Submitted:", { position, photo, info });
-
-
     setReports((prev) => [...prev, newReport]);
-
-
     setPosition(null);
-    setTaskadd(true);
+    setTaskadd(false);
     setPhoto(null);
     setInfo("");
-    alert("Report Submitted! (Check console)");
+   
   };
 
   return (
@@ -209,8 +203,8 @@ export default function map() {
 
               {/* Other users' reports */}
               {reports.map((r) => (
-                <Marker key={r.id} position={[r.lat, r.lng]} icon={otherUserIcon}>
-                  <Popup>{r.info}<img src={r.icon} /></Popup>
+                <Marker  key={r.id} position={[r.lat, r.lng]} icon={otherUserIcon}>
+                  <Popup >{r.info}<img className="rounded-md mt-2" src={r.image} /></Popup>
                 </Marker>
               ))}
 

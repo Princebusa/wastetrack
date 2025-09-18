@@ -13,7 +13,7 @@ const upload = multer({
     storage : multer.memoryStorage(),
 })
 
-router.post('/' , authenticate ,  upload.single("image") , addReport)
+router.post('/' , authenticate ,  upload.single("image") , authenticate , addReport)
 
 router.get('/', authenticate , getUserReports ) // login user data or reports 
 

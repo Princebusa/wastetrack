@@ -2,10 +2,10 @@ import ImageKit from "imagekit";
 import dotenv from 'dotenv';
 dotenv.config();
 
-const imagekit = new ImageKit({
-  publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
-  privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
-  urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
+const  imagekit = new ImageKit({
+  publicKey : process.env.IMAGE_PUBLIC_KEY,
+  privateKey : process.env.IMAGE_PRIVATE_KEY,
+  urlEndpoint : process.env.IMAGE_URL_ENDPOINT
 });
 
 async function fileUpload(file, fileName) {

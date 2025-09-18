@@ -1,21 +1,12 @@
-import Header from "../Landing/header"
-import HeroSection from "../Landing/hero-section"
-import HowItWorksSection from "../Landing/how-it-works-section"
-import CommunityMapSection from "../Landing/community-map-section"
-import RewardsSection from "../Landing/rewards-section"
-import Footer from "../Landing/footer"
 
+import { use, useEffect } from "react";
+import { useNavigate } from "react-router-dom"
 export default function HomePage() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate('/app')
+  }, [])
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main>
-        <HeroSection />
-        <HowItWorksSection />
-        <CommunityMapSection />
-        <RewardsSection />
-      </main>
-      <Footer />
-    </div>
+   <p>loading....</p>
   )
 }

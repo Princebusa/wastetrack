@@ -3,8 +3,47 @@ import base from '../assets/base.jpg'
 import rank2 from '../assets/rank-2.png'
 import rank3 from '../assets/rank-3.png'
 import rank1 from '../assets/rank-1.png'
+import { use, useEffect, useState } from 'react'
+import axios from 'axios'
 
 const Leaderboard = () => {
+const [data, setData] = useState([])
+const [top3user, setTop3User] = useState([])
+console.log(data)
+
+ useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/get/allusers`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      // res.data = { success: true, data: [...] }
+   const users = res.data.data;
+
+// Sort descending (highest → lowest points)
+const sortedData = [...users].sort((a, b) => b.points - a.points);
+
+setData(sortedData);
+
+      // For top 3 (highest points)
+      const top3 = [...users]
+        .sort((a, b) => b.points - a.points)
+        .slice(0, 3);
+
+      setTop3User(top3);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  fetchData();
+}, []);
 
   const leaderboardData = [
     {
@@ -74,36 +113,34 @@ const Leaderboard = () => {
               <tr>
                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Rank</th>
                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">User</th>
-                <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Area</th>
+               
                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Points</th>
                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Badge</th>
               </tr>
             </thead>
             <tbody>
-              {leaderboardData.map((user, index) => (
-                <tr key={user.id} className="bg-gray-50 shadow-sm rounded-lg">
+              {data.map((user, index) => (
+                <tr key={index} className="bg-gray-50 shadow-sm rounded-lg">
                   {/* Rank Number */}
                   <td className="px-4 py-2 font-semibold text-gray-700">{index + 1}</td>
 
                   {/* Avatar + Name */}
                   <td className="px-4 py-2 flex items-center gap-3">
                     <div className="w-10 h-10 flex items-center justify-center rounded-full bg-green-800 text-white font-semibold">
-                      {user.name.charAt(0).toUpperCase()}
+                      {user.username.charAt(0).toUpperCase()}
                     </div>
-                    <span className="text-gray-800">{user.name}</span>
+                    <span className="text-gray-800">{user.username}</span>
                   </td>
 
-                  {/* Area */}
-                  <td className="px-4 py-2 text-gray-600">{user.area}</td>
-
+                 
                   {/* Points */}
                   <td className="px-4 py-2 text-gray-600">{user.points}</td>
 
                   {/* Badge */}
                   <td className="px-4 py-2">
-                    <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                    {/* <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
                       {user.badge}
-                    </span>
+                    </span> */}
                   </td>
                 </tr>
               ))}

@@ -5,7 +5,7 @@ import HomePage from './Landing/index';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import ProtectedRoute from './components/ProtectedRoute';
-import Test from './dashboard/Test';
+import Test from './dashboard/test';
 function App() {
   return (
     <AuthProvider>

@@ -54,6 +54,7 @@ export default function map() {
   const [info, setInfo] = useState("");
   const [reports, setReports] = useState([]);
   const [taskadd, setTaskadd] = useState(false);
+  const [loading, setLoading] = useState(false);
   const taskaddref = useRef(null);
 
   useGSAP(
@@ -132,6 +133,7 @@ const res = await axios.get("http://localhost:3000/api/get/allreports", {
 
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     if (!position || !photo || !info) {
       alert("Please select location, add photo & details!");
@@ -152,6 +154,7 @@ const res = await axios.get("http://localhost:3000/api/get/allreports", {
     });
 if(data.success === true){
    toast.success("✅ Report submitted successfully!");
+    setLoading(false);
 }
     const newReport = {
       id: Date.now(),
@@ -268,7 +271,7 @@ if(data.success === true){
               type="submit"
               className="hover:shadow-lg cursor-pointer flex w-full hover:bg-[#70911b] text-white py-2 rounded-lg text-[14px] font-medium justify-center items-center bg-[#5c8001] transition"
             >
-              Submit Report<div className="rotate-90"><ArrowUp01Icon size={16} />
+              { !loading == true ? "Submit Report" : "Submitting..."}<div className="rotate-90"><ArrowUp01Icon size={16} />
               </div>
             </button>
           </form>

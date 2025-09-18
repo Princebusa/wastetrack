@@ -11,7 +11,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-green-100 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="font-semibold text-[20px] flex "><p className="bg-green-800 text-white flex justify-center block w-[30px] h-[30px] rounded-[4px] mr-2">P</p><p className="font-bold">PlastTrack</p> </div>
+          <div className="font-semibold text-[20px] flex "><p className="bg-green-800 text-white flex justify-center block w-[30px] h-[30px] rounded-[4px] mr-2">S</p><p className="font-bold">ScoreBin</p> </div>
 
           <nav className="hidden md:flex items-center space-x-8">
             <a

@@ -17,7 +17,7 @@ const Social = () => {
     // Fetch posts
     const fetchPosts = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/posts');
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/posts`);
             const data = await response.json();
             if (data.success) {
                 setPosts(data.data);
@@ -46,7 +46,7 @@ const Social = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:3000/api/posts', {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/posts`, {
                 method: 'POST',
                 body: formData,
             });
@@ -67,7 +67,7 @@ const Social = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3000/api/posts/${postId}/vote`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/posts/${postId}/vote`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ const Social = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3000/api/posts/${postId}/vote`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/posts/${postId}/vote`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

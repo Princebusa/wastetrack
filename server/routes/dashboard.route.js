@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { getAllReview, getAllUser , getUser , getReport } from "../controllers/dashboard.controller.js";
 import {authenticate} from '../middleware/authMiddleware.js';
-
+import { specificReport } from "../controllers/dashboard.controller.js";
 const router = Router();
 
 router.get("/allusers", authenticate , getAllUser); // all user for report show on map  

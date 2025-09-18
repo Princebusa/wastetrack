@@ -21,7 +21,6 @@ const userSchema = new mongoose.Schema(
     },
     avatarUrl : {
       type : String,
-
     },
     points: {
       type: Number,

@@ -1,6 +1,8 @@
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
+import {  getAvatar } from "../utils/getAvatar.js";
+
 
 export const register = async (req, res) => {
 
@@ -12,8 +14,9 @@ export const register = async (req, res) => {
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: "User already exists" });
+    const avatarUrl = await getAvatar();
 
-    const user = new User({ email, password , username});
+    const user = new User({ email, password , username , avatarUrl : avatarUrl.url});
     await user.save();
     
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET , { expiresIn: process.env.JWT_EXPIRE });

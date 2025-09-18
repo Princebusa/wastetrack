@@ -49,10 +49,6 @@ export const createPost = async (req, res) => {
 export const getPosts = async (req, res) => {
   try {
     const posts = await Post.find()
-      .populate("user", "username email")
-      .populate("comments.user", "username email")
-      .populate("upvotes", "username")
-      .populate("downvotes", "username")
       .sort({ createdAt: -1 });
 
     // Transform posts to include vote counts and user voting status
@@ -64,16 +60,25 @@ export const getPosts = async (req, res) => {
       
       // Check if current user has voted (if authenticated)
       if (req.user) {
-        postObj.userUpvoted = post.upvotes.some(vote => vote._id.toString() === req.user.id);
-        postObj.userDownvoted = post.downvotes.some(vote => vote._id.toString() === req.user.id);
+        postObj.userUpvoted = post.upvotes.some(vote => vote.toString() === req.user.id);
+        postObj.userDownvoted = post.downvotes.some(vote => vote.toString() === req.user.id);
       } else {
         postObj.userUpvoted = false;
         postObj.userDownvoted = false;
       }
       
-      // Remove user details for anonymous posts
-      if (post.isAnonymous) {
-        postObj.user = null;
+      // Remove all user details for complete anonymity
+      delete postObj.user;
+      delete postObj.upvotes;
+      delete postObj.downvotes;
+      
+      // Remove user details from comments for anonymity
+      if (postObj.comments && postObj.comments.length > 0) {
+        postObj.comments = postObj.comments.map(comment => {
+          const commentObj = comment.toObject ? comment.toObject() : comment;
+          delete commentObj.user;
+          return commentObj;
+        });
       }
       
       return postObj;
@@ -88,15 +93,29 @@ export const getPosts = async (req, res) => {
 // READ ONE
 export const getPostById = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id)
-      .populate("user", "username email")
-      .populate("comments.user", "username email");
+    const post = await Post.findById(req.params.id);
 
-    if (!post) return res.status(404).json({ success :false , message: "Post not found" });
+    if (!post) return res.status(404).json({ success: false, message: "Post not found" });
 
-    res.json({success : true , data : post});
+    const postObj = post.toObject();
+    
+    // Remove all user details for complete anonymity
+    delete postObj.user;
+    delete postObj.upvotes;
+    delete postObj.downvotes;
+    
+    // Remove user details from comments for anonymity
+    if (postObj.comments && postObj.comments.length > 0) {
+      postObj.comments = postObj.comments.map(comment => {
+        const commentObj = comment.toObject ? comment.toObject() : comment;
+        delete commentObj.user;
+        return commentObj;
+      });
+    }
+
+    res.json({success: true, data: postObj});
   } catch (error) {
-    res.status(500).json({success :false , message: error.message });
+    res.status(500).json({success: false, message: error.message});
   }
 };
 
@@ -143,12 +162,29 @@ export const deletePost = async (req, res) => {
 // VOTE ON POST
 export const votePost = async (req, res) => {
   try {
+    console.log('Vote request received:', {
+      postId: req.params.postId,
+      voteType: req.body.voteType,
+      userId: req.user?.id,
+      headers: req.headers.authorization ? 'Authorization header present' : 'No authorization header'
+    });
+
     const { postId } = req.params;
     const { voteType } = req.body; // 'upvote' or 'downvote'
     const userId = req.user.id;
 
+    if (!userId) {
+      return res.status(401).json({success: false, message: "User not authenticated"});
+    }
+
     const post = await Post.findById(postId);
     if (!post) return res.status(404).json({success: false, message: "Post not found"});
+
+    console.log('Post found:', {
+      postId: post._id,
+      currentUpvotes: post.upvotes.length,
+      currentDownvotes: post.downvotes.length
+    });
 
     // Remove user from both vote arrays first
     post.upvotes = post.upvotes.filter(vote => vote.toString() !== userId);
@@ -163,6 +199,12 @@ export const votePost = async (req, res) => {
 
     await post.save();
 
+    console.log('Vote saved:', {
+      newUpvotes: post.upvotes.length,
+      newDownvotes: post.downvotes.length,
+      score: post.upvotes.length - post.downvotes.length
+    });
+
     res.json({
       success: true,
       message: `Post ${voteType}d successfully`,
@@ -173,6 +215,7 @@ export const votePost = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Vote error:', error);
     res.status(500).json({success: false, message: error.message});
   }
 };

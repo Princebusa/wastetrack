@@ -49,11 +49,9 @@ export const addReport = async (req, res) => {
 };
 
 export const getUserReports = async (req, res) => {
-  
-
   try {
     const user = await Report.find();
-    res.send({success : true , data : user});
+    res.send({ success: true, data: user });
   } catch (error) {
     res
       .status(500)
@@ -71,39 +69,38 @@ export const updateStatus = async (req, res) => {
     { new: true }
   );
 
-  res.send({success : true} , {message : "progress updated "});
+  res.send({ success: true }, { message: "progress updated " });
   try {
   } catch (error) {
     res
-    .status(500)
-    .json({ success: false, message: "Server error", error: error.message });
+      .status(500)
+      .json({ success: false, message: "Server error", error: error.message });
   }
 };
 
 export const compeleteStatus = async (req, res) => {
-  const userId = req.user
   const { postId } = req.params;
   const file = req.file;
 
-  const imageUrl = await fileUpload(
-    file.buffer,
-    `${userId.id}_cleanImage`
-  );
+  const imageUrl = await fileUpload(file.buffer, `${req.user.id}_cleanImage`);
 
-  const updateReport = await Report.findByIdAndUpdate(
-    postId,
-    {
-      $set: { cleanupProofUrl: imageUrl.url , status: "resolved"  },
-    },
+  const updateReport = await Report.findByIdAndUpdate(postId, {
+    $set: { cleanupProofUrl: imageUrl.url, status: "resolved" },
+  });
+
+  const userId = updateReport.userId;
+  const result = await User.findByIdAndUpdate(
+    userId,
+    { $inc: { points: 10 } }, // increment points by 10
     { new: true }
   );
+  console.log(result);
 
-
-  res.send({success : true , message : "progress updated "});
+  res.send({ success: true, message: "progress updated " });
   try {
   } catch (error) {
     res
-    .status(500)
-    .json({ success: false, message: "Server error", error: error.message });
+      .status(500)
+      .json({ success: false, message: "Server error", error: error.message });
   }
 };

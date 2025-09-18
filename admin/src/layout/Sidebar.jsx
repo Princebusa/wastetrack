@@ -7,15 +7,11 @@ import { useAuth } from "../context/AuthContext"
 const sidebar = () => {
 const{logout} = useAuth()
     const sidebar = [
-        {
-            icon: MapsIcon,
-            text: "Map",
-            url: "/app/Map"
-        },
+        
         {
             icon: CheckmarkSquare04Icon,
-            text: "My Marks",
-            url: "/app/mymarks"
+            text: "All Reports",
+            url: "/app/allreports"
         },
         {
             icon: MentoringIcon,

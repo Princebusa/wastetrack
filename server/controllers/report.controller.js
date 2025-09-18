@@ -44,10 +44,10 @@ export const addReport = async (req, res) => {
 };
 
 export const getUserReports = async (req, res) => {
-  const userId = req.user.id;
+  
 
   try {
-    const user = await User.findById(userId).populate("reports");
+    const user = await Report.find();
     res.send({success : true , data : user});
   } catch (error) {
     res.status(500).json({success : false , message: "Server error", error: error.message });

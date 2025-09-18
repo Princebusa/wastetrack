@@ -5,7 +5,7 @@ import HomePage from './Landing/index';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import ProtectedRoute from './components/ProtectedRoute';
-
+import Test from './dashboard/Test';
 function App() {
   return (
     <AuthProvider>
@@ -19,6 +19,7 @@ function App() {
               </ProtectedRoute>
             } 
           />
+          <Route path='/test' element={<Test />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />

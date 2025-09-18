@@ -9,7 +9,7 @@ import axios from 'axios'
 const Leaderboard = () => {
 const [data, setData] = useState([])
 const [top3user, setTop3User] = useState([])
-console.log(data)
+
 
  useEffect(() => {
   const fetchData = async () => {
@@ -105,9 +105,9 @@ setData(sortedData);
   ]
   return (
     <Layout>
-      <div className='mt-3 flex gap-5'>
+      <div className='mt-3 flex gap-5  flex justify-center'>
 
-        <div>
+        <div className='w-[50%]'>
           <table className="min-w-full border-separate border-spacing-y-3">
             <thead className="bg-gray-100">
               <tr>
@@ -127,7 +127,9 @@ setData(sortedData);
                   {/* Avatar + Name */}
                   <td className="px-4 py-2 flex items-center gap-3">
                     <div className="w-10 h-10 flex items-center justify-center rounded-full bg-green-800 text-white font-semibold">
-                      {user.username.charAt(0).toUpperCase()}
+                      <img src={user.avatarUrl}/>
+                      
+                     
                     </div>
                     <span className="text-gray-800">{user.username}</span>
                   </td>
@@ -150,20 +152,29 @@ setData(sortedData);
 
 
         </div>
-        <div className='flex flex-col justify-end items-center'>
+        <div className='w-[50%] flex flex-col justify-end items-center'>
           <div className=" font-semibold text-[20px]">Rankings At Country Level</div>
           <div className="h-20">Top 3 Citizen</div>
           
           <div className='flex mt-10 relative w-[600px] justify-center items-end gap-5'>
             <img className='absolute bottom-0 left-0' src={base} alt="" />
-            <div className='w-[100px] rounded-t-lg border-b-0 h-[300px] border border-[#b0a207] bg-gradient-to-b from-[hsla(55,100%,55%,1)] to-[hsla(0,0%,100%,1)]'>
+            <div className='shadow-lg flex  flex-col items-center w-[100px] rounded-t-lg border-b-0 h-[300px] border border-[#b0a207] bg-gradient-to-b from-[hsla(55,100%,55%,1)] to-[hsla(0,0%,100%,1)]'>
               <img className='mt-[-80px] ' src={rank3} alt="" />
+              <img className='w-[45px] h-[45px] mt-[-60px]' src={data[2]?.avatarUrl}/>
+              <p className='mt-5'>pts {data[2]?.points}</p>
+              <p>{data[2]?.username}</p>
             </div>
-            <div className=' w-[100px] rounded-t-lg border-b-0 border border-[#5b7e01] bg-gradient-to-b from-[hsla(77,98%,25%,1)] to-[hsla(0,0%,100%,1)] h-[400px]'>
+            <div className='flex  flex-col items-center w-[100px] rounded-t-lg border-b-0 border border-[#5b7e01] bg-gradient-to-b from-[hsla(77,98%,25%,1)] to-[hsla(0,0%,100%,1)] h-[400px]'>
              <img className='mt-[-80px]' src={rank1} alt="" />
+              <img className='w-[45px] h-[45px] mt-[-60px]' src={data[0]?.avatarUrl}/>
+              <p className='mt-5'>pts {data[0]?.points}</p>
+              <p>{data[0]?.username}</p>
             </div>
-            <div className='w-[100px]  rounded-t-lg border-b-0 border border-[#565656] bg-gradient-to-b from-[hsla(0,0%,59%,1)] to-[hsla(0,0%,100%,1)] h-[350px]'>
-             <img className='mt-[-80px]' src={rank2} alt="" />
+            <div className='flex  flex-col items-center w-[100px]   rounded-t-lg border-b-0 border border-[#565656] bg-gradient-to-b from-[hsla(0,0%,59%,1)] to-[hsla(0,0%,100%,1)] h-[350px]'>
+             <img className='mt-[-80px] ' src={rank2} alt="" />
+              <img className='w-[45px] mt-[-60px] h-[45px]' src={data[1]?.avatarUrl}/>
+              <p className='mt-5'>pts {data[1]?.points}</p>
+              <p>{data[1]?.username}</p>
             </div>
           </div>
         </div>

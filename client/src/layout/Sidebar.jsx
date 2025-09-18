@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom"
 import {UserSquareIcon, MentoringIcon, CheckmarkSquare04Icon, CancelSquareIcon, InboxDownloadIcon, MapsIcon, DiscoverSquareIcon} from 'hugeicons-react'
 import { useAuth } from "../context/AuthContext"
-
+import coin from '../assets/coin.png'
 
 
 const sidebar = () => {
@@ -95,6 +95,7 @@ const{logout} = useAuth()
                     })}
                     </div>
                     </div>
+                    <img className="w-7" src={coin} />
                     <button onClick={logout}  className="flex rounded-[7px] py-[5px] px-2 mt-full font-medium text-[13px] gap-[8px] hover:bg-gray-200 cursor-pointer"><CancelSquareIcon size={19}/>Log out</button>
                 </div>
             </div>

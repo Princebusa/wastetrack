@@ -5,6 +5,7 @@ import MyMark from './dashboard/MyMarks';
 import Leaderboard from './dashboard/Leaderboard';
 import Inbox from './dashboard/Inbox';
 import Map from './dashboard/map';
+import Social from './dashboard/social';
 
 function dashboard() {
 
@@ -18,6 +19,7 @@ function dashboard() {
     <Route path="/leaderboard" element={<Leaderboard/>} />
     <Route path="/inbox" element={<Inbox/>} />
     <Route path="/map" element={<Map/>} />
+    <Route path="/social" element={<Social/>} />
     </Routes>
 
       

@@ -34,14 +34,19 @@ const{logout} = useAuth()
 
     const social = [
         {
+            icon: "ChatIcon",
+            text: "Social Feed",
+            url: "/app/social"
+        },
+        {
             icon: DiscoverSquareIcon,
             text: "Explore",
-            url: "app/explore"
+            url: "/app/explore"
         },
         {
             icon: UserSquareIcon,
             text: "Profile",
-            url: "app/profile"
+            url: "/app/profile"
         }
     ]
     return (
@@ -49,7 +54,7 @@ const{logout} = useAuth()
             <div className="fixed w-[205px] top-0 left-0 bg-gray-100  h-screen flex flex-col justify-between border-r border-r-gray-300">
                 <div className=' gap-2 border-b border-b-gray-300  min-h-[40px] flex items-center '>
                     {/* <img className='w-[45px]'  alt="logo" /> */}
-                    <div className="font-semibold text-[17px] pl-4 flex"><p className="bg-green-800 text-white flex justify-center block w-[25px] h-[25px] rounded-[4px] mr-2">P</p><p>PlastTrack</p> </div>
+                    <div className="font-semibold text-[17px] pl-4 flex"><p className="bg-green-800 text-white flex justify-center items-center w-[25px] h-[25px] rounded-[4px] mr-2">P</p><p>PlastTrack</p> </div>
 
                 </div>
                 <div className="px-2 py-5 h-full flex flex-col justify-between gap-1">

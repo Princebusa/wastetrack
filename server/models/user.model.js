@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema(
       required: [true, "Password is required"],
       minlength: 6,
     },
+    avatarUrl : {
+      type : String,
+      required : true,
+    },
     points: {
       type: Number,
       default: 0,

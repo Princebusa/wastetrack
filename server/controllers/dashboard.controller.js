@@ -6,7 +6,7 @@ import Report from "../models/report.model.js"
 export const getAllUser = async (req, res) => {
 
     try {
-      const user = await User.find();
+      const user = await User.find().select("username points");
       res.send({success : true , data : user});
     } catch (error) {
       res.status(500).json({success : false , message: "Server error", error: error.message });

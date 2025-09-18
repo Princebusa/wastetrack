@@ -98,9 +98,8 @@ export const compeleteStatus = async (req, res) => {
     { new: true }
   );
 
-  console.log(updateReport);
 
-  res.send({success : true} , {message : "progress updated "});
+  res.send({success : true , message : "progress updated "});
   try {
   } catch (error) {
     res

@@ -33,6 +33,10 @@ const reportSchema = mongoose.Schema({
     type: String, // URL for the "after" photo submitted by a user
     default: "",
   },
+   createdAt: {
+    type: String,
+    default: () => moment().format("YYYY-MM-DD HH:mm:ss") // store formatted
+  }
 });
 
 const Report = mongoose.model('Report' , reportSchema);

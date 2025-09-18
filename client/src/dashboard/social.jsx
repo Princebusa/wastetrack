@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import Layout from '../layout/Layout';
 
 const Social = () => {
     const [posts, setPosts] = useState([]);
@@ -16,7 +17,7 @@ const Social = () => {
     // Fetch posts
     const fetchPosts = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/posts');
+            const response = await fetch('http://localhost:3000/api/posts');
             const data = await response.json();
             if (data.success) {
                 setPosts(data.data);
@@ -45,7 +46,7 @@ const Social = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:5000/api/posts', {
+            const response = await fetch('http://localhost:3000/api/posts', {
                 method: 'POST',
                 body: formData,
             });
@@ -66,7 +67,7 @@ const Social = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:5000/api/posts/${postId}/vote`, {
+            const response = await fetch(`http://localhost:3000/api/posts/${postId}/vote`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -89,7 +90,7 @@ const Social = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:5000/api/posts/${postId}/vote`, {
+            const response = await fetch(`http://localhost:3000/api/posts/${postId}/vote`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -124,13 +125,14 @@ const Social = () => {
     }
 
     return (
+        <Layout>
         <div className="max-w-2xl mx-auto p-4 space-y-6">
             {/* Header */}
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-gray-900">Community Feed</h1>
                 <button
                     onClick={() => setShowCreatePost(!showCreatePost)}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                    className="bg-[#5c8001] hover:bg-[#70911b] text-white px-4 py-2 rounded-lg transition-colors"
                 >
                     {showCreatePost ? 'Cancel' : 'New Post'}
                 </button>
@@ -269,7 +271,7 @@ const Social = () => {
                     ))
                 )}
             </div>
-        </div>
+        </div></Layout>
     );
 };
 

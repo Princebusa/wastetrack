@@ -34,14 +34,9 @@ const{logout} = useAuth()
 
     const social = [
         {
-            icon: "ChatIcon",
+            icon: DiscoverSquareIcon,
             text: "Social Feed",
             url: "/app/social"
-        },
-        {
-            icon: DiscoverSquareIcon,
-            text: "Explore",
-            url: "/app/explore"
         },
         {
             icon: UserSquareIcon,

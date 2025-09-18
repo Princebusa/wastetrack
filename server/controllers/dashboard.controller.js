@@ -44,3 +44,13 @@ export const getReport = async (req, res) => {
       res.status(500).json({success : false , message: "Server error", error: error.message });
     }
 };
+
+export const specificReport = async (req, res) => {
+  const reportId = req.params.reportId;
+  try {
+    const report = await Report.findById(reportId);
+    res.send({success : true , data : report});
+  } catch (error) {
+    res.status(500).json({success : false , message: "Server error", error: error.message });
+  }
+};

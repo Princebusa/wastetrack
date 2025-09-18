@@ -26,6 +26,11 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    badges : {
+      type : String,
+      enum : ["silver" , "gold" , "platinum"],
+      default : "silver",
+    },
     reports : [
       {
         type: mongoose.Schema.Types.ObjectId,

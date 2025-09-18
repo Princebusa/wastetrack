@@ -8,8 +8,9 @@ dotenv.config();
 import connectDB from './config/dbConnection.js' ;
 import UserRouter from "./routes/user.route.js";
 import ReportRouter from "./routes/report.route.js";
-import DashboardRouter from "./routes/dashboard.route.js";
+import getAllDataRouter from "./routes/dashboard.route.js";
 import PostRouter from "./routes/post.route.js"
+import UpdateRouter from "./routes/adminDashboard.route.js"
 
 app.use(cors());
 app.use(express.json());
@@ -18,8 +19,9 @@ app.use(express.urlencoded({extended : true}));
 //router 
 app.use('/api/auth' , UserRouter); // user login-Signup
 app.use('/api/report' , ReportRouter ); // user report create / show 
-app.use('/api/get' , DashboardRouter ); // show all Users and Reports
+app.use('/api/get' , getAllDataRouter ); // show all Users and Reports
 app.use('/api/posts' , PostRouter ); // CRUD in Post
+app.use('/api/report/update' , UpdateRouter)
 
 
 // connect to Database 

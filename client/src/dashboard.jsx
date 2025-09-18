@@ -5,6 +5,7 @@ import MyMark from './dashboard/MyMarks';
 import Leaderboard from './dashboard/Leaderboard';
 import Inbox from './dashboard/Inbox';
 import Map from './dashboard/map';
+
 function dashboard() {
 
 
@@ -12,6 +13,7 @@ function dashboard() {
     
    <Routes>
      <Route index element={<Navigate to="mymarks" replace />} />
+    
     <Route path="/mymarks" element={<MyMark/>} />
     <Route path="/leaderboard" element={<Leaderboard/>} />
     <Route path="/inbox" element={<Inbox/>} />

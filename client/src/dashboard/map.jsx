@@ -92,7 +92,11 @@ export default function map() {
 
     const fetchReports = async () => {
       try {
-const res = await axios.get("http://localhost:3000/api/get/allreports"); // your API endpoint
+const res = await axios.get("http://localhost:3000/api/get/allreports", {
+  headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  }
+}); // your API endpoint
        
         const apiData = res.data.data;
 

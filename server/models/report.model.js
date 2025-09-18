@@ -21,12 +21,6 @@ const reportSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  wasteType: {
-    type: String,
-    default: "Other",
-    enum: ["Bottles", "Bags", "Packaging", "Other"],
-    required: true,
-  },
   description : {
     type : String 
   },

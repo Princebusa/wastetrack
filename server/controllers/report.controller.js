@@ -16,18 +16,21 @@ export const addReport = async (req, res) => {
   try {
     const user = await User.findById(userId);
 
-        const imageUrl = await fileUpload(file.buffer, `${user.username}_wasteImage`);
-      
-        const report = new Report({
-          userId,
-          location: {
-            coordinates: [longitude, latitude],
-          },
-          imageUrl: imageUrl.url,
-          description,
-        });
-      
-        await report.save();
+    const imageUrl = await fileUpload(
+      file.buffer,
+      `${user.username}_wasteImage`
+    );
+
+    const report = new Report({
+      userId,
+      location: {
+        coordinates: [longitude, latitude],
+      },
+      imageUrl: imageUrl.url,
+      description,
+    });
+
+    await report.save();
 
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
@@ -37,9 +40,11 @@ export const addReport = async (req, res) => {
 
     updatedUser.save();
 
-    res.send({success : true , message : "reporte succesfully"});
+    res.send({ success: true, message: "reporte succesfully" });
   } catch (error) {
-    res.status(500).json({ success : false , message: "Server error", error: error.message });
+    res
+      .status(500)
+      .json({ success: false, message: "Server error", error: error.message });
   }
 };
 
@@ -48,8 +53,58 @@ export const getUserReports = async (req, res) => {
 
   try {
     const user = await User.findById(userId).populate("reports");
-    res.send({success : true , data : user});
+    res.send({ success: true, data: user });
   } catch (error) {
-    res.status(500).json({success : false , message: "Server error", error: error.message });
+    res
+      .status(500)
+      .json({ success: false, message: "Server error", error: error.message });
+  }
+};
+
+export const updateStatus = async (req, res) => {
+  const { postId } = req.params;
+  const updateReport = await Report.findByIdAndUpdate(
+    postId,
+    {
+      $set: { status: "in-progress" },
+    },
+    { new: true }
+  );
+
+  res.send({success : true} , {message : "progress updated "});
+  try {
+  } catch (error) {
+    res
+    .status(500)
+    .json({ success: false, message: "Server error", error: error.message });
+  }
+};
+
+export const compeleteStatus = async (req, res) => {
+  const userId = req.user
+  const { postId } = req.params;
+  const file = req.file;
+
+  const imageUrl = await fileUpload(
+    file.buffer,
+    `${userId.id}_cleanImage`
+  );
+
+  const updateReport = await Report.findByIdAndUpdate(
+    postId,
+    {
+      $set: { cleanupProofUrl: imageUrl.url , status: "resolved"  },
+    },
+    { new: true }
+  );
+
+  console.log(updateReport);
+
+  res.send({success : true} , {message : "progress updated "});
+  try {
+  } catch (error) {
+    res
+    .status(500)
+    .json({ success: false, message: "Server error", error: error.message });
   }
 };

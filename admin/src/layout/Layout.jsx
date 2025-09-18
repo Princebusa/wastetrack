@@ -16,9 +16,7 @@ const{logout} = useAuth()
                         <p className='font-medium text-[15px]'>{lastPart}</p>
 
                        <div className='flex gap-5 flex items-center'>
-                         <div>
-                            <img className='w-7' src={icon} alt="coin" />
-                        </div>
+                         
                            <div onClick={logout} >
                              <svg
     xmlns="http://www.w3.org/2000/svg"

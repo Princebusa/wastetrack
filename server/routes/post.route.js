@@ -28,8 +28,8 @@ router.put("/:id", authenticate, updatePost);   // Update post
 router.delete("/:id", authenticate, deletePost);// Delete post
 
 // Voting
-router.post("/:postId/vote", authenticate, votePost);     // Vote on post
-router.delete("/:postId/vote", authenticate, removeVote); // Remove vote
+router.post("/:postId/vote", votePost);     // Vote on post
+router.delete("/:postId/vote", removeVote); // Remove vote
 
 // Comments
 router.post("/:id/comment", authenticate, addComment); // Add comment

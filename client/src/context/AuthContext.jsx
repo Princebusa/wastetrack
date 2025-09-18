@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { authService } from '../services/authService';
-
+import axios from 'axios';
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -12,20 +12,69 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
+
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is already authenticated on app load
+    
     const token = authService.getToken();
     if (token) {
       setIsAuthenticated(true);
-      // You might want to validate the token with the backend here
+     
     }
     setLoading(false);
   }, []);
 
+
+
+
+ const checkAuth = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        isAuthenticated(false);
+        setUser(null);
+        return;
+      }
+
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/user`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+     
+        setUser(response.data.data);
+        
+        
+   
+    } catch (error) {
+      console.error("Auth verification failed:", error);
+
+      if (error.response?.status === 401) {
+        localStorage.removeItem("accessToken");
+      }
+
+     
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+
+
+
+
+  
   const login = async (credentials) => {
     try {
       const response = await authService.signin(credentials);

@@ -20,7 +20,7 @@ app.use(express.urlencoded({extended : true}));
 
 //router 
 
-app.get('/user' , authenticate , async (req , res) => {
+app.get('/api/user' , authenticate , async (req , res) => {
     const userId = req.user.id;
 
     try {

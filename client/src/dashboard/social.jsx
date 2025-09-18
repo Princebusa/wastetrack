@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import Layout from '../layout/Layout';
-
+import axios from 'axios';
 const Social = () => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,11 +17,18 @@ const Social = () => {
     // Fetch posts
     const fetchPosts = async () => {
         try {
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/posts`);
-            const data = await response.json();
-            if (data.success) {
-                setPosts(data.data);
-            }
+            const {data} = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/posts`);
+            
+
+
+           
+
+                const users = data?.data;
+
+// Sort descending (highest → lowest points)
+const sortedData = [...users].sort((a, b) => b.upvotes - a.upvotes);
+                setPosts(sortedData);
+            
         } catch (error) {
             console.error('Error fetching posts:', error);
         } finally {
@@ -63,7 +70,7 @@ const Social = () => {
 
     // Vote on post
     const handleVote = async (postId, voteType) => {
-        if (!user) return;
+      
 
         try {
             const token = localStorage.getItem('token');
@@ -86,7 +93,7 @@ const Social = () => {
 
     // Remove vote
     const handleRemoveVote = async (postId) => {
-        if (!user) return;
+        
 
         try {
             const token = localStorage.getItem('token');
@@ -237,27 +244,27 @@ const Social = () => {
                             <div className="flex items-center space-x-4 pt-3 border-t border-gray-100">
                                 <div className="flex items-center space-x-2">
                                     <button
-                                        onClick={() => post.userUpvoted ? handleRemoveVote(post._id) : handleVote(post._id, 'upvote')}
-                                        className={`flex items-center space-x-1 px-3 py-1 rounded-full text-sm transition-colors ${
+                                        onClick={() => handleVote(post._id, 'upvote')}
+                                        className={`cursor-pointer flex items-center space-x-1 px-3 py-1 rounded-full text-sm transition-colors ${
                                             post.userUpvoted 
                                                 ? 'bg-green-100 text-green-700' 
                                                 : 'text-gray-500 hover:bg-gray-100'
                                         }`}
                                     >
                                         <span className="text-lg">↑</span>
-                                        <span>{post.upvoteCount}</span>
+                                        <span>{post.upvotes}</span>
                                     </button>
                                     
                                     <button
-                                        onClick={() => post.userDownvoted ? handleRemoveVote(post._id) : handleVote(post._id, 'downvote')}
-                                        className={`flex items-center space-x-1 px-3 py-1 rounded-full text-sm transition-colors ${
+                                        onClick={() => handleVote(post._id, 'downvote')}
+                                        className={`cursor-pointer flex items-center space-x-1 px-3 py-1 rounded-full text-sm transition-colors ${
                                             post.userDownvoted 
                                                 ? 'bg-red-100 text-red-700' 
                                                 : 'text-gray-500 hover:bg-gray-100'
                                         }`}
                                     >
                                         <span className="text-lg">↓</span>
-                                        <span>{post.downvoteCount}</span>
+                                        <span>{post.downvotes}</span>
                                     </button>
                                 </div>
                                 

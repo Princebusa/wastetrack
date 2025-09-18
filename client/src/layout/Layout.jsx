@@ -6,7 +6,7 @@ const layout = ({ children }) => {
      const location = useLocation();
   const pathParts = location.pathname.split("/"); 
   const lastPart = pathParts[pathParts.length - 1];
-const{logout} = useAuth()
+const{logout, user} = useAuth()
     return (
         <div className="flex w-full bg-cover bg-no-repeat bg-center" >
             <Sidebar />
@@ -16,8 +16,9 @@ const{logout} = useAuth()
                         <p className='font-medium text-[15px]'>{lastPart}</p>
 
                        <div className='flex gap-5 flex items-center'>
-                         <div>
+                         <div className='flex gap-2 items-center cursor-pointer bg-white   rounded-[10px] px-2 py-1'>
                             <img className='w-7' src={icon} alt="coin" />
+                            <p className='text-[14px]'>{user?.points} Points</p>
                         </div>
                            <div onClick={logout} >
                              <svg

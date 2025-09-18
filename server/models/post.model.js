@@ -37,18 +37,15 @@ const postSchema = new mongoose.Schema(
       maxlength: 500,
       required: true,
     },
-    upvotes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
-    downvotes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
+    upvotes: {
+      type: Number,
+      default: 0,
+    },
+
+    downvotes: {
+      type: Number,
+      default: 0,
+    },
     comments: [commentSchema], // embedded comments
   },
   { timestamps: true }

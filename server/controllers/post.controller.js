@@ -49,42 +49,42 @@ export const createPost = async (req, res) => {
 export const getPosts = async (req, res) => {
   try {
     const posts = await Post.find()
-      .sort({ createdAt: -1 });
+      
 
     // Transform posts to include vote counts and user voting status
-    const transformedPosts = posts.map(post => {
-      const postObj = post.toObject();
-      postObj.upvoteCount = post.upvotes.length;
-      postObj.downvoteCount = post.downvotes.length;
-      postObj.score = post.upvotes.length - post.downvotes.length;
+    // const transformedPosts = posts.map(post => {
+    //   const postObj = post.toObject();
+    //     postObj.upvoteCount = post.upvotes.length;
+    //     postObj.downvoteCount = post.downvotes.length;
+    //   postObj.score = post.upvotes.length - post.downvotes.length;
       
-      // Check if current user has voted (if authenticated)
-      if (req.user) {
-        postObj.userUpvoted = post.upvotes.some(vote => vote.toString() === req.user.id);
-        postObj.userDownvoted = post.downvotes.some(vote => vote.toString() === req.user.id);
-      } else {
-        postObj.userUpvoted = false;
-        postObj.userDownvoted = false;
-      }
+    //   // Check if current user has voted (if authenticated)
+    //   if (req.user) {
+    //     postObj.userUpvoted = post.upvotes.some(vote => vote.toString() === req.user.id);
+    //     postObj.userDownvoted = post.downvotes.some(vote => vote.toString() === req.user.id);
+    //   } else {
+    //     postObj.userUpvoted = false;
+    //     postObj.userDownvoted = false;
+    //   }
       
-      // Remove all user details for complete anonymity
-      delete postObj.user;
-      delete postObj.upvotes;
-      delete postObj.downvotes;
+    //   // Remove all user details for complete anonymity
+    //   delete postObj.user;
+    //   delete postObj.upvotes;
+    //   delete postObj.downvotes;
       
-      // Remove user details from comments for anonymity
-      if (postObj.comments && postObj.comments.length > 0) {
-        postObj.comments = postObj.comments.map(comment => {
-          const commentObj = comment.toObject ? comment.toObject() : comment;
-          delete commentObj.user;
-          return commentObj;
-        });
-      }
+    //   // Remove user details from comments for anonymity
+    //   if (postObj.comments && postObj.comments.length > 0) {
+    //     postObj.comments = postObj.comments.map(comment => {
+    //       const commentObj = comment.toObject ? comment.toObject() : comment;
+    //       delete commentObj.user;
+    //       return commentObj;
+    //     });
+    //   }
       
-      return postObj;
-    });
+    //   return postObj;
+    // });
 
-    res.json({success: true, data: transformedPosts});
+    res.json({success: true, data: posts});
   } catch (error) {
     res.status(500).json({success: false, message: error.message});
   }
@@ -165,37 +165,35 @@ export const votePost = async (req, res) => {
     console.log('Vote request received:', {
       postId: req.params.postId,
       voteType: req.body.voteType,
-      userId: req.user?.id,
-      headers: req.headers.authorization ? 'Authorization header present' : 'No authorization header'
     });
 
     const { postId } = req.params;
     const { voteType } = req.body; // 'upvote' or 'downvote'
-    const userId = req.user.id;
+ 
 
-    if (!userId) {
-      return res.status(401).json({success: false, message: "User not authenticated"});
-    }
+ 
 
     const post = await Post.findById(postId);
     if (!post) return res.status(404).json({success: false, message: "Post not found"});
 
-    console.log('Post found:', {
-      postId: post._id,
-      currentUpvotes: post.upvotes.length,
-      currentDownvotes: post.downvotes.length
-    });
 
-    // Remove user from both vote arrays first
-    post.upvotes = post.upvotes.filter(vote => vote.toString() !== userId);
-    post.downvotes = post.downvotes.filter(vote => vote.toString() !== userId);
 
     // Add to appropriate vote array
-    if (voteType === 'upvote') {
-      post.upvotes.push(userId);
-    } else if (voteType === 'downvote') {
-      post.downvotes.push(userId);
-    }
+   if (voteType === 'upvote') {
+  await Post.findByIdAndUpdate(
+    postId,
+    { $inc: { upvotes: 1 } },   // increment upvotes count by +1
+    { new: true }
+  );
+} else if (voteType === 'downvote') {
+  await Post.findByIdAndUpdate(
+    postId,
+    { $inc: { downvotes: 1 } }, // increment downvotes count by +1
+    { new: true }
+  );
+}
+
+
 
     await post.save();
 

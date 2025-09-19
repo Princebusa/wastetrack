@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, use } from "react";
 import { useGSAP } from '@gsap/react';
 import gsap from "gsap";
 import axios from 'axios'
 import Layout from "../layout/Layout";
 import MinimalInput from "../components/input";
 import toast from "react-hot-toast";
+import trash from "../assets/trash.png"
 import {
   MapContainer,
   TileLayer,
@@ -15,7 +16,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { MapPin } from "lucide-react";
-import { Album02Icon, ArrowUp01Icon, Location03Icon, Cancel01Icon } from 'hugeicons-react'
+import { Album02Icon, ArrowUp01Icon, Location03Icon, Cancel01Icon,Delete03Icon } from 'hugeicons-react'
 
 
 
@@ -31,6 +32,12 @@ const userIcon = new L.Icon({
 // Custom Icon for other users
 const otherUserIcon = new L.Icon({
   iconUrl: "https://cdn-icons-png.flaticon.com/512/252/252025.png",
+  iconSize: [35, 35],
+  iconAnchor: [17, 35],
+});
+
+const dump = new L.Icon({
+  iconUrl: trash,
   iconSize: [35, 35],
   iconAnchor: [17, 35],
 });
@@ -57,6 +64,89 @@ export default function map() {
   const [loading, setLoading] = useState(false);
   const taskaddref = useRef(null);
 
+
+console.log(reports)
+
+// Your new data
+useEffect(() => {
+  let newData = [
+  {
+    "lat": 21.1702,
+    "lng": 72.8311,
+    "type": "dump",
+    "info": "Ring Road, Surat",
+    "image": "https://english.loktej.com/media/2023-02/news-photo-(15).jpg"
+  },
+  {
+    "lat": 21.1850,
+    "lng": 72.8405,
+    "type": "dump",
+    "info": "Adajan, Surat",
+    "image": "https://static.toiimg.com/thumb/msid-65170270,imgsize-120709,width-400,height-225,resizemode-72/65170270.jpg"
+  },
+  {
+    "lat": 21.1605,
+    "lng": 72.8502,
+    "type": "dump",
+    "info": "Varachha, Surat",
+    "image": "https://im.indiatimes.in/facebook/2018/Jul/garbage_disposal_surat_gujarat_landfills_1530516274.jpg?w=1200&h=900&cc=1&webp=1&q=75"
+  },
+  {
+    "lat": 21.1758,
+    "lng": 72.8203,
+    "type": "dump",
+    "info": "Nanpura, Surat",
+    "image": "https://images.indianexpress.com/2022/03/punjab-waste.jpg"
+  },
+  {
+    "lat": 21.1901,
+    "lng": 72.8359,
+    "type": "dump",
+    "info": "Athwa Gate, Surat",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgDdevewf1R723Ao9NbCXJ5QaKiR2iISz-Z-pz9ai0o389O5LKcSPnbbSVz1x83378ny4&usqp=CAU"
+  },
+  {
+    "lat": 21.1555,
+    "lng": 72.8250,
+    "type": "dump",
+    "info": "Rander, Surat",
+    "image": "https://www.tribuneindia.com/sortd-service/imaginary/v22-01/jpg/medium/high?url=dGhldHJpYnVuZS1zb3J0ZC1wcm8tcHJvZC1zb3J0ZC9tZWRpYTRlNTM5N2IwLTBiOTEtMTFmMC05YTQ0LTIxMTA4MTFlOTA5YS5qcGc="
+  },
+  {
+    "lat": 21.1659,
+    "lng": 72.8455,
+    "type": "dump",
+    "info": "Katargam, Surat",
+    "image": "https://static.toiimg.com/thumb/msid-116149376,imgsize-105312,width-400,height-225,resizemode-72/116149376.jpg"
+  },
+  {
+    "lat": 21.1807,
+    "lng": 72.8150,
+    "type": "dump",
+    "info": "Udhna, Surat",
+    "image": "https://www.tribuneindia.com/sortd-service/imaginary/v22-01/jpg/large/high?url=dGhldHJpYnVuZS1zb3J0ZC1wcm8tcHJvZC1zb3J0ZC9tZWRpYWI0YjA5NGYwLTRlN2ItMTFlZi04MGUwLTg5MTBmNjk1YjZkZS5qcGc="
+  },
+  {
+    "lat": 21.1502,
+    "lng": 72.8400,
+    "type": "dump",
+    "info": "Parle Point, Surat",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHayswDM7qJvNd2sWVPRio7vfOtuLrAOgnFWeEsaNiXv2KFJbTTQn8FnWcAdzeNkO13jc&usqp=CAU"
+  },
+  {
+    "lat": 21.2001,
+    "lng": 72.8305,
+    "type": "dump",
+    "info": "Piplod, Surat",
+    "image": "https://static.toiimg.com/thumb/msid-58696245,width-1280,height-720,resizemode-72/58696245.jpg"
+  }
+]
+
+
+reports.push(...newData);
+
+
+}, []);
   useGSAP(
     function () {
       if (!taskaddref.current) return;
@@ -209,11 +299,15 @@ if(data.success === true){
               )}
 
               {/* Other users' reports */}
-              {reports.map((r) => (
-                <Marker  key={r.id} position={[r.lat, r.lng]} icon={otherUserIcon}>
+              {reports.map((r, id) => {
+                const icon = r.type === 'dump' ? dump : otherUserIcon;
+                return(
+                <Marker  key={id} position={[r.lat, r.lng]} icon={icon}>
                   <Popup >{r.info}<img className="rounded-md mt-2" src={r.image} /></Popup>
                 </Marker>
-              ))}
+              )
+              }
+              )}
 
               <LocationMarker setTaskadd={setTaskadd} setPosition={setPosition} />
             </MapContainer>

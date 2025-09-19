@@ -16,15 +16,15 @@ import AdminRouter from "./routes/admin.route.js"
 import User from "./models/user.model.js";
 
 
-const allowedOrigins = [
-  "https://scorebin.vercel.app",
-  "https://adminscorebin.vercel.app"
-];
-app.use(cors({
-  origin: allowedOrigins, 
-  credentials: true 
-}));
-// app.use(cors());
+// const allowedOrigins = [
+//   "https://scorebin.vercel.app",
+//   "https://adminscorebin.vercel.app"
+// ];
+// app.use(cors({
+//   origin: allowedOrigins, 
+//   credentials: true 
+// }));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 

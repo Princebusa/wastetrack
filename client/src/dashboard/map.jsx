@@ -181,7 +181,7 @@ reports.push(...newData);
 
     const fetchReports = async () => {
       try {
-const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}get/allreports`, {
+const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/get/allreports`, {
   headers: {
     'Authorization': `Bearer ${localStorage.getItem('token')}`
   }

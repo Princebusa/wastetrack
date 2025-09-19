@@ -162,10 +162,7 @@ export const deletePost = async (req, res) => {
 // VOTE ON POST
 export const votePost = async (req, res) => {
   try {
-    console.log('Vote request received:', {
-      postId: req.params.postId,
-      voteType: req.body.voteType,
-    });
+   
 
     const { postId } = req.params;
     const { voteType } = req.body; // 'upvote' or 'downvote'
@@ -179,16 +176,16 @@ export const votePost = async (req, res) => {
 
 
     // Add to appropriate vote array
-   if (voteType === 'upvote') {
+ if (voteType === 'upvote') {
   await Post.findByIdAndUpdate(
     postId,
-    { $inc: { upvotes: 1 } },   // increment upvotes count by +1
+    { $inc: { upvotes: 1, engagementScore: 1  } }, // +1 upvote, -1 downvote
     { new: true }
   );
 } else if (voteType === 'downvote') {
   await Post.findByIdAndUpdate(
     postId,
-    { $inc: { downvotes: 1 } }, // increment downvotes count by +1
+    { $inc: { downvotes: 1, engagementScore: 1  } }, // +1 downvote, -1 upvote
     { new: true }
   );
 }
@@ -197,11 +194,7 @@ export const votePost = async (req, res) => {
 
     await post.save();
 
-    console.log('Vote saved:', {
-      newUpvotes: post.upvotes.length,
-      newDownvotes: post.downvotes.length,
-      score: post.upvotes.length - post.downvotes.length
-    });
+   
 
     res.json({
       success: true,

@@ -46,6 +46,10 @@ const postSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    engagementScore: {
+      type: Number,
+      default: 0,
+    },
     comments: [commentSchema], // embedded comments
   },
   { timestamps: true }

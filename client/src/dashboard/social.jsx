@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import Layout from '../layout/Layout';
+import {Upload05Icon} from 'hugeicons-react';
 import axios from 'axios';
 const Social = () => {
     const [posts, setPosts] = useState([]);
@@ -164,22 +165,16 @@ const sortedData = [...users].sort((a, b) => b.upvotes - a.upvotes);
                         </div>
                         
                         <div className="flex items-center space-x-4">
-                            <label className="flex items-center">
-                                <input
-                                    type="checkbox"
-                                    checked={newPost.isAnonymous}
-                                    onChange={(e) => setNewPost({...newPost, isAnonymous: e.target.checked})}
-                                    className="mr-2"
-                                />
-                                <span className="text-sm text-gray-600">Post anonymously</span>
-                            </label>
-                            
+                            <div className='border border-dashed border-gray-500 hover:bg-gray-200 cursor-pointer rounded-lg p-2 cursor-pointer flex items-center gap-2 flex-col justify-center'>
+                                
+                            <Upload05Icon color='black'/>
                             <input
                                 type="file"
                                 accept="image/*"
                                 onChange={(e) => setNewPost({...newPost, image: e.target.files[0]})}
-                                className="text-sm text-gray-600"
+                                className="cursor-pointer w-[170px] text-sm text-gray-600"
                             />
+                            </div>
                         </div>
                         
                         <div className="flex justify-end space-x-2">
@@ -241,11 +236,11 @@ const sortedData = [...users].sort((a, b) => b.upvotes - a.upvotes);
                             </div>
 
                             {/* Voting Section */}
-                            <div className="flex items-center space-x-4 pt-3 border-t border-gray-100">
+                            <div className="flex items-center justify-between space-x-4 pt-3 border-t border-gray-100">
                                 <div className="flex items-center space-x-2">
                                     <button
                                         onClick={() => handleVote(post._id, 'upvote')}
-                                        className={`cursor-pointer flex items-center space-x-1 px-3 py-1 rounded-full text-sm transition-colors ${
+                                        className={`cursor-pointer flex items-center space-x-1 px-3 py-1 rounded-md border border-gray-300 text-sm transition-colors ${
                                             post.userUpvoted 
                                                 ? 'bg-green-100 text-green-700' 
                                                 : 'text-gray-500 hover:bg-gray-100'
@@ -257,7 +252,7 @@ const sortedData = [...users].sort((a, b) => b.upvotes - a.upvotes);
                                     
                                     <button
                                         onClick={() => handleVote(post._id, 'downvote')}
-                                        className={`cursor-pointer flex items-center space-x-1 px-3 py-1 rounded-full text-sm transition-colors ${
+                                        className={`cursor-pointer flex items-center space-x-1 px-3 py-1 rounded-md border border-gray-300 text-sm transition-colors ${
                                             post.userDownvoted 
                                                 ? 'bg-red-100 text-red-700' 
                                                 : 'text-gray-500 hover:bg-gray-100'
@@ -269,8 +264,8 @@ const sortedData = [...users].sort((a, b) => b.upvotes - a.upvotes);
                                 </div>
                                 
                                 <div className="text-sm text-gray-500">
-                                    Score: <span className={`font-medium ${post.score >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                                        {post.score}
+                                    Engagement: <span className={`font-medium ${post.score >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                        {post.engagementScore}
                                     </span>
                                 </div>
                             </div>

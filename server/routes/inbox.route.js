@@ -5,7 +5,7 @@ import Report from '../models/report.model.js';
 
 router.get("/", async (req, res) => {
   try {
-    const inboxs = await Inbox.find().populate({
+    const inboxs = await Inbox.find({status : "reported"}).populate({
       path: "reportId", // field name in User schema
       select: "description _id", // only include title, description and exclude _id
     });

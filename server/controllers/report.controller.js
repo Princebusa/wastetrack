@@ -2,6 +2,7 @@ import { validationResult } from "express-validator";
 import fileUpload from "../config/imageKit.config.js";
 import User from "../models/user.model.js";
 import Report from "../models/report.model.js";
+import Inbox from  "../models/inbox.model.js";
 
 export const addReport = async (req, res) => {
   const errors = validationResult(req);
@@ -30,8 +31,13 @@ export const addReport = async (req, res) => {
       description,
     });
 
-    await report.save();
+    const newreport = await report.save();
 
+    const inboxMessage = new Inbox({ 
+      reportId: newreport._id,
+     });
+    await inboxMessage.save();
+    
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
       { $push: { reports: report._id } },

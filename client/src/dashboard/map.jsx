@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, use } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useGSAP } from '@gsap/react';
 import gsap from "gsap";
 import axios from 'axios'
@@ -68,8 +68,7 @@ export default function map() {
 console.log(reports)
 
 // Your new data
-useEffect(() => {
-  let newData = [
+let newData = [
   {
     "lat": 21.1702,
     "lng": 72.8311,
@@ -146,7 +145,6 @@ useEffect(() => {
 reports.push(...newData);
 
 
-}, []);
   useGSAP(
     function () {
       if (!taskaddref.current) return;

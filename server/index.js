@@ -13,7 +13,9 @@ import PostRouter from "./routes/post.route.js"
 import UpdateRouter from "./routes/adminDashboard.route.js"
 import { authenticate } from "./middleware/authMiddleware.js";
 import AdminRouter from "./routes/admin.route.js"
+import InboxRouter from "./routes/inbox.route.js"
 import User from "./models/user.model.js";
+
 
 
 const allowedOrigins = [
@@ -44,12 +46,15 @@ app.get('/api/user' , authenticate , async (req , res) => {
     }
 });
 
+
+
 app.use('/api/auth' , UserRouter); // user login-Signup
 app.use('/api/auth/admin', AdminRouter) // admin login-signup
 app.use('/api/report' , ReportRouter ); // user report create / show 
 app.use('/api/get' , getAllDataRouter ); // show all Users and Reports
 app.use('/api/posts' , PostRouter ); // CRUD in Post
 app.use('/api/report/update' , UpdateRouter);
+app.use('/api/inboxs' , InboxRouter);
 
 // connect to Database 
 connectDB();

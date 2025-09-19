@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import Layout from '../layout/Layout';
-
+import {Upload05Icon} from 'hugeicons-react';
+import axios from 'axios';
 const Social = () => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,11 +18,18 @@ const Social = () => {
     // Fetch posts
     const fetchPosts = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/posts');
-            const data = await response.json();
-            if (data.success) {
-                setPosts(data.data);
-            }
+            const {data} = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/posts`);
+            
+
+
+           
+
+                const users = data?.data;
+
+// Sort descending (highest → lowest points)
+const sortedData = [...users].sort((a, b) => b.upvotes - a.upvotes);
+                setPosts(sortedData);
+            
         } catch (error) {
             console.error('Error fetching posts:', error);
         } finally {
@@ -34,15 +42,40 @@ const Social = () => {
     }, []);
 
     // Create new post
-    
+    const handleCreatePost = async (e) => {
+        e.preventDefault();
+        if (!newPost.description.trim()) return;
+
+        const formData = new FormData();
+        formData.append('description', newPost.description);
+        formData.append('isAnonymous', newPost.isAnonymous);
+        if (newPost.image) {
+            formData.append('image', newPost.image);
+        }
+
+        try {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/posts`, {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await response.json();
+            if (data.success) {
+                setNewPost({ description: '', isAnonymous: true, image: null });
+                setShowCreatePost(false);
+                fetchPosts(); // Refresh posts
+            }
+        } catch (error) {
+            console.error('Error creating post:', error);
+        }
+    };
 
     // Vote on post
     const handleVote = async (postId, voteType) => {
-        if (!user) return;
+      
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3000/api/posts/${postId}/vote`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/posts/${postId}/vote`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -61,11 +94,11 @@ const Social = () => {
 
     // Remove vote
     const handleRemoveVote = async (postId) => {
-        if (!user) return;
+        
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3000/api/posts/${postId}/vote`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/posts/${postId}/vote`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -105,11 +138,64 @@ const Social = () => {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-gray-900">Community Feed</h1>
-               
+                <button
+                    onClick={() => setShowCreatePost(!showCreatePost)}
+                    className="bg-[#5c8001] hover:bg-[#70911b] text-white px-4 py-2 rounded-lg transition-colors"
+                >
+                    {showCreatePost ? 'Cancel' : 'New Post'}
+                </button>
             </div>
 
             {/* Create Post Form */}
-           
+            {showCreatePost && (
+                <div className="bg-white rounded-lg border border-gray-200 p-6">
+                    <form onSubmit={handleCreatePost} className="space-y-4">
+                        <div>
+                            <textarea
+                                value={newPost.description}
+                                onChange={(e) => setNewPost({...newPost, description: e.target.value})}
+                                placeholder="What's on your mind?"
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                                rows="3"
+                                maxLength="500"
+                            />
+                            <div className="text-right text-sm text-gray-500 mt-1">
+                                {newPost.description.length}/500
+                            </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-4">
+                            <div className='border border-dashed border-gray-500 hover:bg-gray-200 cursor-pointer rounded-lg p-2 cursor-pointer flex items-center gap-2 flex-col justify-center'>
+                                
+                            <Upload05Icon color='black'/>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => setNewPost({...newPost, image: e.target.files[0]})}
+                                className="cursor-pointer w-[170px] text-sm text-gray-600"
+                            />
+                            </div>
+                        </div>
+                        
+                        <div className="flex justify-end space-x-2">
+                            <button
+                                type="button"
+                                onClick={() => setShowCreatePost(false)}
+                                className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                disabled={!newPost.description.trim()}
+                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Post
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            )}
 
             {/* Posts Feed */}
             <div className="space-y-4">
@@ -150,36 +236,36 @@ const Social = () => {
                             </div>
 
                             {/* Voting Section */}
-                            <div className="flex items-center space-x-4 pt-3 border-t border-gray-100">
+                            <div className="flex items-center justify-between space-x-4 pt-3 border-t border-gray-100">
                                 <div className="flex items-center space-x-2">
                                     <button
-                                        onClick={() => post.userUpvoted ? handleRemoveVote(post._id) : handleVote(post._id, 'upvote')}
-                                        className={`flex items-center space-x-1 px-3 py-1 rounded-full text-sm transition-colors ${
+                                        onClick={() => handleVote(post._id, 'upvote')}
+                                        className={`cursor-pointer flex items-center space-x-1 px-3 py-1 rounded-md border border-gray-300 text-sm transition-colors ${
                                             post.userUpvoted 
                                                 ? 'bg-green-100 text-green-700' 
                                                 : 'text-gray-500 hover:bg-gray-100'
                                         }`}
                                     >
                                         <span className="text-lg">↑</span>
-                                        <span>{post.upvoteCount}</span>
+                                        <span>{post.upvotes}</span>
                                     </button>
                                     
                                     <button
-                                        onClick={() => post.userDownvoted ? handleRemoveVote(post._id) : handleVote(post._id, 'downvote')}
-                                        className={`flex items-center space-x-1 px-3 py-1 rounded-full text-sm transition-colors ${
+                                        onClick={() => handleVote(post._id, 'downvote')}
+                                        className={`cursor-pointer flex items-center space-x-1 px-3 py-1 rounded-md border border-gray-300 text-sm transition-colors ${
                                             post.userDownvoted 
                                                 ? 'bg-red-100 text-red-700' 
                                                 : 'text-gray-500 hover:bg-gray-100'
                                         }`}
                                     >
                                         <span className="text-lg">↓</span>
-                                        <span>{post.downvoteCount}</span>
+                                        <span>{post.downvotes}</span>
                                     </button>
                                 </div>
                                 
                                 <div className="text-sm text-gray-500">
-                                    Score: <span className={`font-medium ${post.score >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                                        {post.score}
+                                    Engagement: <span className={`font-medium ${post.score >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                        {post.engagementScore}
                                     </span>
                                 </div>
                             </div>
